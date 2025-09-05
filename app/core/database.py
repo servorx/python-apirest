@@ -1,7 +1,7 @@
 from sqlmodel import SQLModel, create_engine, Session
 
 # Configuración de conexión (ajusta usuario/contraseña según XAMPP/phpMyAdmin)
-DATABASE_URL = "mysql+pymysql://root:@localhost:3307/campusdev"
+DATABASE_URL = "mysql+pymysql://root:@localhost:3307/coworking_db"
 
 engine = create_engine(DATABASE_URL, echo=True)
 

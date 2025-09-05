@@ -1,6 +1,6 @@
 -- en este documento van las estructuras de las tablas para la base de datos 
-CREATE DATABASE IF NOT EXISTS campusdev;
-USE campusdev;
+CREATE DATABASE IF NOT EXISTS coworking_db;
+USE coworking_db;
 
 CREATE TABLE IF NOT EXISTS users(
     id INT PRIMARY KEY AUTO_INCREMENT,

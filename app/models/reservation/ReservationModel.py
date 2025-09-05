@@ -1,8 +1,6 @@
 from sqlmodel import SQLModel, Field, Relationship
-from typing import Optional, List
+from typing import Optional
 from datetime import date, time
-from app.models.user.UsersModel import User
-from app.models.room.RoomModel import Room
 
 class Reservation(SQLModel, table=True):
     __tablename__ = "reservations"
@@ -15,6 +13,6 @@ class Reservation(SQLModel, table=True):
     hora_fin: time = Field(nullable=False)
     estado: str = Field(max_length=50, nullable=False)
 
-    # Relaciones inversas
+    # Relaciones inversas (sin importar directamente las clases)
     usuario: Optional["User"] = Relationship(back_populates="reservations")
     sala: Optional["Room"] = Relationship(back_populates="reservations")

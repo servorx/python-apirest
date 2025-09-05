@@ -1,1 +1,0 @@
-# este documento se encarga de controlar el backend del api 
