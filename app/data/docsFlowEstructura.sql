@@ -26,7 +26,6 @@ CREATE TABLE IF NOT EXISTS reservations(
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL,
     estado VARCHAR(50) NOT NULL,
-    CONSTRAINT reservations_fk_1 FOREIGN KEY (usuario_id) REFERENCES users(id),
-    CONSTRAINT reservations_fk_2 FOREIGN KEY (sala_id) REFERENCES rooms(id)
+    CONSTRAINT reservations_fk_1 FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT reservations_fk_2 FOREIGN KEY (sala_id) REFERENCES rooms(id) ON DELETE CASCADE
 ) ENGINE=INNODB;    
-

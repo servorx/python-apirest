@@ -61,7 +61,7 @@ async def login_for_access_token(
             detail="Incorrect username or password",
             headers={"WWW-Authenticate": "Bearer"},
         )
-    token = create_access_token(user.email, user.id, timedelta(minutes=20))
+    token = create_access_token(user.email, user.id, user.rol, timedelta(minutes=20))
     return {"access_token": token, "token_type": "bearer"}
 
 def authenticate_user(username: str, password: str, db: Session) -> Optional[User]:
@@ -73,13 +73,14 @@ def authenticate_user(username: str, password: str, db: Session) -> Optional[Use
         return None
     return user
 
-def create_access_token(username: str, user_id: int, expires_delta: timedelta):
-    encode = {"sub": username, "id": user_id}
+def create_access_token(username: str, user_id: int, rol: str, expires_delta: timedelta):
+    encode = {"sub": username, "id": user_id, "rol": rol}
     expires = datetime.utcnow() + expires_delta
     encode.update({"exp": expires})
     return jwt.encode(encode, SECRET_KEY, algorithm=ALGORITHM)
 
-async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
+
+def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         username: str = payload.get("sub")
@@ -88,11 +89,11 @@ async def get_current_user(token: Annotated[str, Depends(oauth2_scheme)]):
         rol = payload.get("rol")
         if username is None or user_id is None:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                                detail="Could not validate credentials")
+                detail="Could not validate credentials")
         return {"email": email, "rol": rol}
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Could not validate credentials")
+                detail="Could not validate credentials")
 
 def verify_admin(token: Annotated[str, Depends(oauth2_scheme)]):
     try:
@@ -100,9 +101,9 @@ def verify_admin(token: Annotated[str, Depends(oauth2_scheme)]):
         rol = payload.get("rol")
         if rol != "admin":
             raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
-                                detail="Only admins can access this resource")
+                detail="Only admins can access this resource")
     except JWTError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,
-                            detail="Could not validate credentials")    
+                detail="Could not validate credentials")    
 
 auth = router
