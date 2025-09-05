@@ -58,7 +58,7 @@ async def get_all_users(
 
 # eliminar usuario (solo admin)
 @router.delete("/{id}", status_code=status.HTTP_200_OK)
-async def delete_user(
+def delete_user(
     id: int,
     db: db_dependency,
     token: Annotated[str, Depends(oauth2_scheme)]

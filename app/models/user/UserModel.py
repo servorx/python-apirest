@@ -13,4 +13,4 @@ class User(SQLModel, table=True):
     rol: str = Field(max_length=50, nullable=False)
 
     # Relación uno-a-muchos con reservas
-    reservations: List[Reservation] = Relationship(back_populates="usuario")
+    reservations: list["Reservation"] = Relationship(back_populates="usuario", sa_relationship_kwargs={"cascade": "all, delete"})
