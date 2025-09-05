@@ -1,4 +1,6 @@
 -- en este documento van archivos de prueba
+USE coworking_db;
+
 INSERT INTO users (nombre, email, contraseña_hash, rol) VALUES
 ('Carlos López', 'carlos.lopez@campusdev.com', 'hash_123', 'Administrador'),
 ('María Pérez', 'maria.perez@campusdev.com', 'hash_124', 'Estudiante'),

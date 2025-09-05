@@ -1,9 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
-from app.controllers import get_session
-from models import Reservation, Room
+from app.core.database import get_session
+from app.models.room.RoomModel import Room
+from app.models.reservation.ReservationModel import Reservation
 from app.models.schemas import ReservationCreate, ReservationRead
-from auth import get_current_user
+from app.auth.auth import get_current_user
 from datetime import date
 
 router = APIRouter(prefix="/reservations", tags=["reservations"])

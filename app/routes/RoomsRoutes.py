@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlmodel import Session, select
-from app.controllers import get_session
-from models import Room
-from models.schemas import RoomCreate, RoomRead
-from auth import get_current_user, verify_admin
+from app.core.database import get_session
+from app.models.room.RoomModel import Room
+from app.models.schemas import RoomCreate, RoomRead
+from app.auth.auth import get_current_user, verify_admin
 
 router = APIRouter(prefix="/rooms", tags=["rooms"])
 
