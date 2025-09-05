@@ -13,13 +13,8 @@ def list_rooms(session: Session = Depends(get_session)):
     rooms = session.exec(select(Room)).all()
     return rooms
 
-
 @router.post("/", response_model=RoomRead, status_code=status.HTTP_201_CREATED, dependencies=[Depends(verify_admin)])
-def create_room(room: RoomCreate, 
-                session: Session = Depends(get_session),
-                user: dict = Depends(get_current_user)):
-    if user["rol"] != "admin":
-        raise HTTPException(status_code=403, detail="Only admins can create rooms")
+def create_room(room: RoomCreate, session: Session = Depends(get_session)):
     db_room = Room.from_orm(room)
     session.add(db_room)
     session.commit()
@@ -27,12 +22,8 @@ def create_room(room: RoomCreate,
     return db_room
 
 
-@router.put("/{room_id}", response_model=RoomRead)
-def update_room(room_id: int, room: RoomCreate,
-                session: Session = Depends(get_session),
-                user: dict = Depends(get_current_user)):
-    if user["rol"] != "admin":
-        raise HTTPException(status_code=403, detail="Only admins can update rooms")
+@router.put("/{room_id}", response_model=RoomRead, dependencies=[Depends(verify_admin)])
+def update_room(room_id: int, room: RoomCreate, session: Session = Depends(get_session)):
     db_room = session.get(Room, room_id)
     if not db_room:
         raise HTTPException(status_code=404, detail="Room not found")
@@ -44,14 +35,11 @@ def update_room(room_id: int, room: RoomCreate,
     return db_room
 
 
-@router.delete("/{room_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete_room(room_id: int,
-                session: Session = Depends(get_session),
-                user: dict = Depends(get_current_user)):
-    if user["rol"] != "admin":
-        raise HTTPException(status_code=403, detail="Only admins can delete rooms")
+@router.delete("/{room_id}", status_code=status.HTTP_204_NO_CONTENT, dependencies=[Depends(verify_admin)])
+def delete_room(room_id: int, session: Session = Depends(get_session)):
     db_room = session.get(Room, room_id)
     if not db_room:
         raise HTTPException(status_code=404, detail="Room not found")
     session.delete(db_room)
     session.commit()
+

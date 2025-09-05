@@ -40,10 +40,13 @@ def my_reservations(session: Session = Depends(get_session),
     ).all()
     return reservations
 
-
-@router.get("/room/{room_id}", response_model=list[ReservationRead])
+router.get("/room/{room_id}", response_model=list[ReservationRead])
 def reservations_by_room(room_id: int,
-                         session: Session = Depends(get_session)):
+                         session: Session = Depends(get_session),
+                         user: dict = Depends(get_current_user)):
+    if user["rol"] != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can view reservations by room")
+
     reservations = session.exec(
         select(Reservation).where(Reservation.sala_id == room_id)
     ).all()
@@ -52,12 +55,15 @@ def reservations_by_room(room_id: int,
 
 @router.get("/date/{reservation_date}", response_model=list[ReservationRead])
 def reservations_by_date(reservation_date: date,
-                         session: Session = Depends(get_session)):
+                         session: Session = Depends(get_session),
+                         user: dict = Depends(get_current_user)):
+    if user["rol"] != "admin":
+        raise HTTPException(status_code=403, detail="Only admins can view reservations by date")
+
     reservations = session.exec(
         select(Reservation).where(Reservation.fecha == reservation_date)
     ).all()
     return reservations
-
 
 @router.delete("/{reservation_id}", status_code=status.HTTP_204_NO_CONTENT)
 def cancel_reservation(reservation_id: int,
