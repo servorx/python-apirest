@@ -38,8 +38,7 @@ async def get_me(
     except JWTError:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Could not validate credentials"
-        )
+            detail="Could not validate credentials")
 
 # obtener todos los usuarios (solo admin)
 @router.get("/")
@@ -57,15 +56,15 @@ async def get_all_users(
     users = db.exec(select(User)).all()
     return users
 
-# 🟢 Eliminar usuario (solo admin)
-@router.delete("/{id}", status_code=status.HTTP_204_NO_CONTENT)
+# eliminar usuario (solo admin)
+@router.delete("/{id}", status_code=status.HTTP_200_OK)
 async def delete_user(
     id: int,
     db: db_dependency,
     token: Annotated[str, Depends(oauth2_scheme)]
 ):
     payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-    if payload.get("rol") != "admin":
+    if payload.get("rol").lower() != "admin":
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Only admins can delete users"

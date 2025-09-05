@@ -13,4 +13,7 @@ class Room(SQLModel, table=True):
     recursos: str = Field(max_length=50, nullable=False)
 
     # Relación uno-a-muchos con reservas
-    reservations: List[Reservation] = Relationship(back_populates="sala")
+    reservations: List["Reservation"] = Relationship(
+        back_populates="sala",
+        passive_deletes=True  
+    )
