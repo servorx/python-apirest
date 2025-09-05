@@ -1,6 +1,6 @@
 -- en este documento van las estructuras de las tablas para la base de datos 
-CREATE DATABASE IF NOT EXISTS campusdev;
-USE campusdev;
+CREATE DATABASE IF NOT EXISTS coworking_db;
+USE coworking_db;
 
 CREATE TABLE IF NOT EXISTS users(
     id INT PRIMARY KEY AUTO_INCREMENT,
@@ -25,6 +25,7 @@ CREATE TABLE IF NOT EXISTS reservations(
     fecha DATE NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fin TIME NOT NULL,
-    estado VARCHAR(50) NOT NULL
+    estado VARCHAR(50) NOT NULL,
+    CONSTRAINT reservations_fk_1 FOREIGN KEY (usuario_id) REFERENCES users(id) ON DELETE CASCADE,
+    CONSTRAINT reservations_fk_2 FOREIGN KEY (sala_id) REFERENCES rooms(id) ON DELETE CASCADE
 ) ENGINE=INNODB;    
-
