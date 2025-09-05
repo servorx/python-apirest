@@ -1,15 +1,20 @@
-# el archivo main.py es el punto de entrada de la aplicación
 from fastapi import FastAPI
-from app.database.connection import Base, engine
-from app.routes import auth, users, rooms, reservations
+from app.controllers import create_db_and_tables
+from app.auth.auth import auth
+from app.models.room.RoomModel import Room
+from app.models.reservation.ReservationModel import Reservation
+from app.routes import rooms, reservations
+app = FastAPI()
 
-# Crear tablas en caso de que no existan
-Base.metadata.create_all(bind=engine)
+@app.on_event("startup")
+def on_startup():
+    create_db_and_tables()
 
-app = FastAPI(title="Coworking Reservations API")
+@app.get("/")
+def root():
+    # TODO: OBVIAMENTE TENGO QUE REVISAR ESTO
+    return {"Esto funciona milagrosamente "}
 
-# Incluir routers
 app.include_router(auth.router)
-app.include_router(users.router)
 app.include_router(rooms.router)
 app.include_router(reservations.router)

@@ -1,21 +1,3 @@
-# Creación de base de datos y nombres de carpetas y archivos
-
-Este es un ejem de forma correcta y estándar para crear correctamente una base de datos para los proyectos de campusdev
-
----
-
-## Convención de nombres y estructura del proyecto
-
-### Base de datos (MySQL)
-
-- Los nombres de las tablas deben ir en **plural** y en **camelCase**, por ejemplo:
-  - `users`
-  - `chatMessages`
-  - `callResponses`
-
-⚠️ Eviten usar guiones bajos (`snake_case`) o nombres en singular.
-
----
 
 ### Archivos SQL del proyecto
 
